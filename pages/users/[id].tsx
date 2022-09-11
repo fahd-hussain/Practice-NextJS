@@ -1,0 +1,38 @@
+import { GetServerSideProps, NextPage } from "next";
+import { UserInterface } from "../../types/user.types";
+
+interface UserProps {
+  user: UserInterface;
+}
+
+const User: NextPage<UserProps> = ({ user }) => {
+  return (
+    <div className="_container_div">
+      <h1>{user.name}</h1>
+    </div>
+  );
+};
+
+export const getServerSideProps: GetServerSideProps<any, any> = async ({
+  params,
+}) => {
+  const res = await fetch(
+    `${process.env.REACT_APP_ENDPOINT_BASE_URL}/users/${params.id}`
+  );
+  const user: UserInterface = await res.json();
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: "/users",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { user }, // will be passed to the page component as props
+  };
+};
+
+export default User;
