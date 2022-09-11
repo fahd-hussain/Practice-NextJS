@@ -1,7 +1,8 @@
 // Static Generation with data
 // Scenario 2: Your page paths depend on external data
 
-import { GetStaticProps, GetStaticPropsContext, NextPage } from "next";
+import { GetStaticPaths, NextPage } from "next";
+import { useRouter } from "next/router";
 import { PostInterface } from "../../types/post.types";
 
 interface PostProps {
@@ -9,6 +10,12 @@ interface PostProps {
 }
 
 const Post: NextPage<PostProps> = ({ post }) => {
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <div className="_container_div">Loading...</div>;
+  }
+
   return (
     <div className="_container_div">
       <h1>{post.title}</h1>
@@ -18,7 +25,7 @@ const Post: NextPage<PostProps> = ({ post }) => {
 };
 
 // This function gets called at build time
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   // Call an external API endpoint to get posts
   const res = await fetch(`${process.env.REACT_APP_ENDPOINT_BASE_URL}/posts`);
   const posts: PostInterface[] = await res.json();
@@ -30,8 +37,8 @@ export async function getStaticPaths() {
 
   // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
-  return { paths, fallback: false };
-}
+  return { paths, fallback: true };
+};
 
 // This also gets called at build time
 export const getStaticProps = async ({ params }: any) => {
@@ -43,7 +50,7 @@ export const getStaticProps = async ({ params }: any) => {
   const post: PostInterface = await res.json();
 
   // Pass post data to the page via props
-  return { props: { post } };
+  return { props: { post }, revalidate: 1 };
 };
 
 export default Post;
