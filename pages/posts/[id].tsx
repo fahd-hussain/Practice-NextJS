@@ -1,7 +1,7 @@
 // Static Generation with data
 // Scenario 2: Your page paths depend on external data
 
-import { GetStaticPaths, NextPage } from "next";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { PostInterface } from "../../types/post.types";
 
@@ -41,13 +41,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 // This also gets called at build time
-export const getStaticProps = async ({ params }: any) => {
+export const getStaticProps: GetStaticProps<any, any> = async ({ params }) => {
   // params contains the post `id`.
   // If the route is like /posts/1, then params.id is 1
   const res = await fetch(
     `${process.env.REACT_APP_ENDPOINT_BASE_URL}/posts/${params.id}`
   );
   const post: PostInterface = await res.json();
+
+  if (!post) {
+    return {
+      notFound: true,
+    };
+  }
 
   // Pass post data to the page via props
   return { props: { post }, revalidate: 1 };

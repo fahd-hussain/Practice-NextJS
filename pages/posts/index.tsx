@@ -1,7 +1,7 @@
 // Static Generation with data
 // Scenario 1: Your page content depends on external data
 
-import { NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import { PostInterface } from "../../types/post.types";
 
 interface BlogProps {
@@ -18,7 +18,7 @@ const Blog: NextPage<BlogProps> = ({ posts }) => {
   );
 };
 
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const res = await fetch(process.env.REACT_APP_ENDPOINT_BASE_URL + "/posts");
   const posts = await res.json();
 
@@ -26,7 +26,8 @@ export async function getStaticProps() {
     props: {
       posts,
     },
+    revalidate: 10,
   };
-}
+};
 
 export default Blog;
