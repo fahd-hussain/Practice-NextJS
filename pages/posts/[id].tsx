@@ -37,7 +37,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
-  return { paths, fallback: true };
+  return { paths, fallback: "blocking" };
 };
 
 // This also gets called at build time
@@ -56,7 +56,7 @@ export const getStaticProps: GetStaticProps<any, any> = async ({ params }) => {
   }
 
   // Pass post data to the page via props
-  return { props: { post }, revalidate: 1 };
+  return { props: { post }, revalidate: 5 };
 };
 
 export default Post;
