@@ -1,4 +1,5 @@
-@import "./common.css";
+/* Global styles */
+@import "./common.css"; 
 
 html,
 body {
