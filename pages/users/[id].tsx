@@ -1,5 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
+import Image from "next/image";
 import { UserInterface } from "../../types/user.types";
+import { imageLoader } from "../../utils";
 
 interface UserProps {
   user: UserInterface;
@@ -8,6 +10,13 @@ interface UserProps {
 const User: NextPage<UserProps> = ({ user }) => {
   return (
     <div className="_container_div">
+      <Image
+        loader={imageLoader}
+        src={user.avatar}
+        alt={user.name}
+        width={80}
+        height={80}
+      />
       <h1>{user.name}</h1>
     </div>
   );

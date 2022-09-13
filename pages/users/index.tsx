@@ -1,5 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
 import { UserInterface } from "../../types/user.types";
+import Image from "next/image";
+import { imageLoader } from "../../utils";
 
 interface UserProps {
   users: Array<UserInterface>;
@@ -8,8 +10,17 @@ interface UserProps {
 const User: NextPage<UserProps> = ({ users }) => {
   return (
     <ul>
-      {users.map(({ id, name }) => (
-        <li key={id}>{name}</li>
+      {users.map(({ id, name, avatar }) => (
+        <li key={id} style={{ display: "flex", alignItems: "center" }}>
+          <Image
+            loader={imageLoader}
+            src={avatar}
+            alt={name}
+            width={80}
+            height={80}
+          />
+          <span>{name}</span>
+        </li>
       ))}
     </ul>
   );
