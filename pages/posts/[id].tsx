@@ -11,7 +11,7 @@ interface PostProps {
 
 const Post: NextPage<PostProps> = ({ post }) => {
   const router = useRouter();
-  const { id } = router.query;
+  const id = router.query.id as unknown;
 
   if (router.isFallback) {
     return <div className="_container_div">Loading...</div>;
@@ -23,6 +23,15 @@ const Post: NextPage<PostProps> = ({ post }) => {
         {id} - {post.title}
       </h1>
       <p>{post.description}</p>
+      <button
+        onClick={() =>
+          router.push(`/posts/${++(id as number)}`, undefined, {
+            shallow: true,
+          })
+        }
+      >
+        Next
+      </button>
     </div>
   );
 };
