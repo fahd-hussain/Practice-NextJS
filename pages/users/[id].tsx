@@ -1,5 +1,6 @@
 import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { UserInterface } from "../../types/user.types";
 import { imageLoader } from "../../utils";
 
@@ -8,6 +9,9 @@ interface UserProps {
 }
 
 const User: NextPage<UserProps> = ({ user }) => {
+  const router = useRouter();
+  const { id } = router.query;
+
   return (
     <div className="_container_div">
       <Image
@@ -17,7 +21,7 @@ const User: NextPage<UserProps> = ({ user }) => {
         width={80}
         height={80}
       />
-      <h1>{user.name}</h1>
+      <h1>{id} - {user.name}</h1>
     </div>
   );
 };

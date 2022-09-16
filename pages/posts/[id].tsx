@@ -11,6 +11,7 @@ interface PostProps {
 
 const Post: NextPage<PostProps> = ({ post }) => {
   const router = useRouter();
+  const { id } = router.query;
 
   if (router.isFallback) {
     return <div className="_container_div">Loading...</div>;
@@ -18,7 +19,9 @@ const Post: NextPage<PostProps> = ({ post }) => {
 
   return (
     <div className="_container_div">
-      <h1>{post.title}</h1>
+      <h1>
+        {id} - {post.title}
+      </h1>
       <p>{post.description}</p>
     </div>
   );

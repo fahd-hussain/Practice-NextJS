@@ -2,6 +2,7 @@
 // Scenario 1: Your page content depends on external data
 
 import { GetStaticProps, NextPage } from "next";
+import Link from "next/link";
 import { PostInterface } from "../../types/post.types";
 
 interface BlogProps {
@@ -12,7 +13,9 @@ const Blog: NextPage<BlogProps> = ({ posts }) => {
   return (
     <ul>
       {posts.map(({ id, title }) => (
-        <li key={id}>{title}</li>
+        <Link key={id} href={`/posts/${id}`}>
+          <li>{title}</li>
+        </Link>
       ))}
     </ul>
   );
