@@ -3,14 +3,18 @@ import { UserInterface } from "../../types/user.types";
 import Image from "next/image";
 import { imageLoader } from "../../utils";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface UserProps {
   users: Array<UserInterface>;
 }
 
 const User: NextPage<UserProps> = ({ users }) => {
+  const router = useRouter();
+
   return (
     <ul>
+      <button onClick={() => router.push("/posts")}>Go To Posts</button>
       {users.map(({ id, name, avatar }) => (
         <Link
           key={id}

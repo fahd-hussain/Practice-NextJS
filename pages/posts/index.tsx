@@ -3,6 +3,7 @@
 
 import { GetStaticProps, NextPage } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { PostInterface } from "../../types/post.types";
 
 interface BlogProps {
@@ -10,8 +11,11 @@ interface BlogProps {
 }
 
 const Blog: NextPage<BlogProps> = ({ posts }) => {
+  const router = useRouter();
+
   return (
     <ul>
+      <button onClick={() => router.push("/users")}>Go To Users</button>
       {posts.map(({ id, title }) => (
         <Link key={id} href={`/posts/${id}`}>
           <li>{title}</li>
