@@ -4,6 +4,7 @@ import Image from "next/image";
 import { imageLoader } from "../../utils";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { Fragment, useEffect, useState } from "react";
 
 interface UserProps {
   users: Array<UserInterface>;
@@ -11,29 +12,47 @@ interface UserProps {
 
 const User: NextPage<UserProps> = ({ users }) => {
   const router = useRouter();
+  const [cUsers, setCUsers] = useState<UserInterface[]>();
+
+  useEffect(() => {
+    setCUsers(users);
+  }, [users]);
+
+  const _handleDelete = (index: number) => {
+    debugger
+    if (!cUsers) return;
+
+    const tempUsers = [...cUsers];
+    tempUsers.splice(index, 1);
+    setCUsers(tempUsers);
+  };
+
+  if (!cUsers) return <div>Loading.....</div>;
 
   return (
     <ul>
       <button onClick={() => router.push("/posts")}>Go To Posts</button>
-      {users.map(({ id, name, avatar }) => (
-        <Link
-          key={id}
-          href={{
-            pathname: "/users/[id]",
-            query: { id },
-          }}
-        >
-          <li style={{ display: "flex", alignItems: "center" }}>
-            <Image
-              loader={imageLoader}
-              src={avatar}
-              alt={name}
-              width={80}
-              height={80}
-            />
-            <span>{name}</span>
-          </li>
-        </Link>
+      {cUsers.map(({ id, name, avatar }, index) => (
+        <Fragment key={id}>
+          <Link
+            href={{
+              pathname: "/users/[id]",
+              query: { id },
+            }}
+          >
+            <li style={{ display: "flex", alignItems: "center" }}>
+              <Image
+                loader={imageLoader}
+                src={avatar}
+                alt={name}
+                width={80}
+                height={80}
+              />
+              <span>{name}</span>
+            </li>
+          </Link>
+          <button onClick={() => _handleDelete(index)}>Delete</button>
+        </Fragment>
       ))}
     </ul>
   );
@@ -53,7 +72,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   }
 
   return {
-    props: { users }, // will be passed to the page component as props
+    props: { users },
   };
 };
 
