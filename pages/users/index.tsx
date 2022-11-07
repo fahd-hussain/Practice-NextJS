@@ -12,22 +12,20 @@ interface UserProps {
 
 const User: NextPage<UserProps> = ({ users }) => {
   const router = useRouter();
-  const [cUsers, setCUsers] = useState<UserInterface[]>();
+  const [cUsers, setCUsers] = useState<UserInterface[]>([]);
 
   useEffect(() => {
     setCUsers(users);
   }, [users]);
 
   const _handleDelete = (index: number) => {
-    debugger
+    debugger;
     if (!cUsers) return;
 
     const tempUsers = [...cUsers];
     tempUsers.splice(index, 1);
     setCUsers(tempUsers);
   };
-
-  if (!cUsers) return <div>Loading.....</div>;
 
   return (
     <ul>
